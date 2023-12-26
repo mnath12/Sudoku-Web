@@ -1,15 +1,12 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import { SimpleGrid, Box, Center, HStack } from '@chakra-ui/react'
-import Cell from './components/Cell'
+import { Box, Center } from '@chakra-ui/react'
 import Board from './components/Board'
 
 function App() {
-    const [count, setCount] = useState(0)
-    const [value, setValue] = useState()
-
+    /*const [count, setCount] = useState(0)
+    const [value, setValue] = useState() */
+    
     const grid = [ [7,2,3,0,0,0,1,5,9],
                   [6,0,0,3,0,2,0,0,8], 
                   [8,0,0,0,1,0,0,0,2],
@@ -161,7 +158,7 @@ function App() {
 
     function changeGrid (row: any, col: any, val: any) {
         const grid_copy = gameGrid.map(identity)
-        setValue(val)
+        /*setValue(val)*/
         let old_val = grid_copy[row][col]
         
         grid_copy[row][col] = parseInt(val.target.value)

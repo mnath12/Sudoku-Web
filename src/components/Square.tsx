@@ -2,14 +2,14 @@ import { SimpleGrid } from "@chakra-ui/react";
 import Cell from "./Cell";
 
 
-interface squareProps {
+/*interface squareProps {
     setCellInvalid: Array<number>
-}
+}*/
 
 export default function Square ( {changeGrid, square, squareNumber, duplicates}: any) {
-    const square_one = [[7,2,3],
+    /*const square_one = [[7,2,3],
                         [6,0,0],
-                        [8,0,0]]
+                        [8,0,0]]*/
 
     const squareIndex = (squareNumber: number) => {
         return [Math.floor(squareNumber / 3), squareNumber % 3]
