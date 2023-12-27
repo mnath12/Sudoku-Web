@@ -6,7 +6,7 @@ import Cell from "./Cell";
     setCellInvalid: Array<number>
 }*/
 
-export default function Square ( {changeGrid, square, squareNumber, duplicates}: any) {
+export default function Square ( {isDark, changeGrid, square, squareNumber, duplicates}: any) {
     /*const square_one = [[7,2,3],
                         [6,0,0],
                         [8,0,0]]*/
@@ -28,6 +28,7 @@ export default function Square ( {changeGrid, square, squareNumber, duplicates}:
                 const row = actualIndex(squareNumber, i, j)[0]
                 const col = actualIndex(squareNumber, i, j)[1]
                 content.push(<Cell 
+                                isDark = {isDark}
                                 duplicate = {duplicates}    
                                 row = {row} 
                                 col = {col} 

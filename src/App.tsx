@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import './App.css'
-import { Box, Center } from '@chakra-ui/react'
+import { Box, Center, Switch } from '@chakra-ui/react'
 import Board from './components/Board'
+import { useColorMode } from '@chakra-ui/react'
 
 function App() {
     /*const [count, setCount] = useState(0)
@@ -335,14 +336,22 @@ function App() {
     
     }
 
+    const {colorMode, toggleColorMode} = useColorMode()
+    const isDark = colorMode == 'dark'
+
     return (
       <>
     
       
-    <h1>Sudoku</h1>
-    <Box >
+    
+    <Box w = 'calc(100vw)' h = 'calc(100vh)'>
+       <h1>Sudoku</h1>
+       <Switch 
+                    color = 'green'
+                    isChecked = {isDark}
+                    onChange={toggleColorMode}/>
         <Center>
-            <Board checkGameOver = {checkGameOver()}duplicates = {duplicateGrid} changeGrid = {changeGrid} squares ={squares}/>
+            <Board isDark = {isDark} checkGameOver = {checkGameOver()} duplicates = {duplicateGrid} changeGrid = {changeGrid} squares ={squares}/>
         </Center>
     </Box>
     
