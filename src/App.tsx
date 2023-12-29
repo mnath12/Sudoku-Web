@@ -1,26 +1,89 @@
-import { useState } from 'react'
+import {useState } from 'react'
 import './App.css'
-import { Box, Center, Switch } from '@chakra-ui/react'
+import { Box, Button, Center, Switch, /*Switch,*/ VStack} from '@chakra-ui/react'
 import Board from './components/Board'
 import { useColorMode } from '@chakra-ui/react'
+import boards from './boards.json'
 
 function App() {
+
+  
+    let boardString: string = boards[0].boards
+    function getRandomInt(min: number, max: number) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+    }
+    
+    function getNewBoardString() {
+        let puzzleNumber = getRandomInt(0,10000)
+        let i = puzzleNumber*81
+        let j = i + 81
+        return boardString.slice(i, j)
+    }
+
+    function boardStringtoGrid (s: string) {
+        let res: any = []
+        for (let r = 0; r < 9; ++r) {
+            let row = []
+            let offset = 9*r
+            let k = 0
+            while (k + offset < 9 + offset) {
+              if (parseInt(s[k+offset]) == 0) {
+                row.push(parseInt(s[k+offset]))
+              } else {
+                row.push(parseInt(s[k+offset]))
+              }
+              k = k + 1
+            }
+            res.push(row)
+        }
+        return res
+    }
+
+    
+  
     /*const [count, setCount] = useState(0)
     const [value, setValue] = useState() */
     
-    const grid = [ [7,2,3,0,0,0,1,5,9],
-                  [6,0,0,3,0,2,0,0,8], 
-                  [8,0,0,0,1,0,0,0,2],
-                  [0,7,0,6,5,4,0,2,0], 
-                  [0,0,4,2,0,7,3,0,0],
-                  [0,5,0,9,3,1,0,4,0],
-                  [5,0,0,0,7,0,0,0,3],
-                  [4,0,0,1,0,3,0,0,6],
-                  [9,3,2,0,0,0,7,1,4] ]
+  /* CANNOT USE useState Hook to clear grid since it must be fixed, 
+  use state updates it constantly when we enter inputs*/
+
+    
+    const [grid, setGrid] = useState([[7,2,3,0,0,0,1,5,9],
+                                      [6,0,0,3,0,2,0,0,8], 
+                                      [8,0,0,0,1,0,0,0,2],
+                                      [0,7,0,6,5,4,0,2,0], 
+                                      [0,0,4,2,0,7,3,0,0],
+                                      [0,5,0,9,3,1,0,4,0],
+                                      [5,0,0,0,7,0,0,0,3],
+                                      [4,0,0,1,0,3,0,0,6],
+                                      [9,3,2,0,0,0,7,1,4] ])
+    
+    const [enable, setEnable] = useState([,])                         
+ 
+
     const identity = (x:any) => x ;
+
 
     const [gameGrid, setGameGrid] = useState(grid)
     console.log(gameGrid)
+
+
+    function setNewGame () {
+      /*let s = getNewBoardString()
+      console.log(s)
+        console.log(boardStringtoGrid(s))*/
+        const board = boardStringtoGrid(getNewBoardString())
+        setGrid(board)
+        Object.freeze(grid)
+        setGameGrid(board)
+        setDuplicateGrid(falseGrid)
+
+        console.log(gameGrid)
+
+
+    }
 
     let falseGrid: any = []
 
@@ -158,6 +221,7 @@ function App() {
     }
 
     function changeGrid (row: any, col: any, val: any) {
+      setEnable([row,col])
         const grid_copy = gameGrid.map(identity)
         /*setValue(val)*/
         let old_val = grid_copy[row][col]
@@ -182,6 +246,7 @@ function App() {
         }
         setGameGrid(grid_copy)
         setDuplicateGrid(duplicateGrid_copy)
+        
     }
     
     function rowDuplicates() {
@@ -336,26 +401,34 @@ function App() {
     
     }
 
+
     const {colorMode, toggleColorMode} = useColorMode()
     const isDark = colorMode == 'dark'
+    function handleColorMode() {
+      toggleColorMode()
+    }
+
 
     return (
       <>
-    
-      
-    
-    <Box w = 'calc(100vw)' h = 'calc(100vh)'>
-       <h1>Sudoku</h1>
-       <Switch 
-                    color = 'green'
-                    isChecked = {isDark}
-                    onChange={toggleColorMode}/>
-        <Center>
-            <Board isDark = {isDark} checkGameOver = {checkGameOver()} duplicates = {duplicateGrid} changeGrid = {changeGrid} squares ={squares}/>
-        </Center>
-    </Box>
-    
-    
+      <Box w = 'calc(100vw)' h = 'calc(100vh)'>
+        <VStack>
+            <h1>Sudoku</h1>
+            <Switch 
+                color = 'green'
+                isChecked = {isDark}
+    onChange={handleColorMode}/>
+            <Center>
+                <Board enable ={enable} 
+                       isDark = {isDark} 
+                       checkGameOver = {checkGameOver()} 
+                       duplicates = {duplicateGrid} 
+                       changeGrid = {changeGrid} 
+                       squares ={squares}/>
+            </Center>
+        <Button onClick = {() => setNewGame()}> New Game </Button>
+        </VStack>
+      </Box>
       </>
     )
   }
